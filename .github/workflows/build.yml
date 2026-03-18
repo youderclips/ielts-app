@@ -21,6 +21,9 @@ jobs:
           - platform: macos-latest
             target: x86_64-apple-darwin
             label: macos-intel
+          - platform: macos-latest
+            target: aarch64-apple-darwin
+            label: macos-arm
 
     runs-on: ${{ matrix.platform }}
 
@@ -57,7 +60,8 @@ jobs:
           releaseBody: |
             ## Download
             - **Windows**: `.msi` installer
-            - **macOS Intel**: `.dmg` installer
+            - **macOS Intel**: `.dmg` installer (x64)
+            - **macOS Apple Silicon**: `.dmg` installer (arm64)
           releaseDraft: true
           prerelease: false
           args: --target ${{ matrix.target }}
