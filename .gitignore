@@ -31,5 +31,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Sidecar binaries
+# Sidecar binaries (built by CI / PyInstaller — not committed)
 src-tauri/sidecar/*.exe
+src-tauri/sidecar/vocab-server-*
+
+# PyInstaller build artifacts
+sidecar/build/
+sidecar/dist/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo

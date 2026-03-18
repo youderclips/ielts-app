@@ -18,18 +18,27 @@ jobs:
           - platform: windows-latest
             target: x86_64-pc-windows-msvc
             label: windows
-          - platform: macos-latest
+            sidecar_name: vocab-server-x86_64-pc-windows-msvc.exe
+            # PyInstaller onefile output on Windows (relative to repo root)
+            pyinstaller_out: sidecar/dist/vocab-server.exe
+          - platform: macos-13
             target: x86_64-apple-darwin
             label: macos-intel
+            sidecar_name: vocab-server-x86_64-apple-darwin
+            pyinstaller_out: sidecar/dist/vocab-server
           - platform: macos-latest
             target: aarch64-apple-darwin
             label: macos-arm
+            sidecar_name: vocab-server-aarch64-apple-darwin
+            pyinstaller_out: sidecar/dist/vocab-server
 
     runs-on: ${{ matrix.platform }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: true   # pull vocab_db.json if stored via Git LFS
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -47,6 +56,40 @@ jobs:
         with:
           workspaces: src-tauri -> target
 
+      # -----------------------------------------------------------------------
+      # Python sidecar build
+      # -----------------------------------------------------------------------
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies for sidecar
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller fastapi "uvicorn[standard]" pydantic anyio
+
+      - name: Build vocab-server sidecar with PyInstaller
+        # Run from the repo root (ielts-app/) so the spec's relative paths work.
+        # --distpath: where the final exe goes (sidecar/dist/)
+        # --workpath: build temp files
+        run: >
+          pyinstaller sidecar/vocab_server.spec
+          --distpath sidecar/dist
+          --workpath sidecar/build
+          --noconfirm
+
+      - name: Copy sidecar binary to src-tauri/sidecar/
+        shell: bash
+        run: |
+          mkdir -p src-tauri/sidecar
+          cp "${{ matrix.pyinstaller_out }}" "src-tauri/sidecar/${{ matrix.sidecar_name }}"
+          echo "Sidecar binary ready: src-tauri/sidecar/${{ matrix.sidecar_name }}"
+          ls -lh "src-tauri/sidecar/${{ matrix.sidecar_name }}"
+
+      # -----------------------------------------------------------------------
+      # Frontend + Tauri build
+      # -----------------------------------------------------------------------
       - name: Install frontend dependencies
         run: npm ci
 
