@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgb(15, 23, 42); }
+::-webkit-scrollbar-thumb { background: rgb(71, 85, 105); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgb(100, 116, 139); }
+
+/* Inputs */
+input[type="radio"], input[type="checkbox"] { accent-color: #10b981; }
+select { cursor: pointer; }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.3s ease-out; }
+
+/* Card hover glow */
+.card-glow {
+  @apply transition-all duration-200;
+}
+.card-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px -5px rgba(16, 185, 129, 0.15);
+  border-color: rgb(52, 211, 153);
+}
+
+/* Topic card */
+.topic-card {
+  @apply transition-all duration-200 cursor-pointer;
+}
+.topic-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px -10px rgba(16, 185, 129, 0.2);
+}
+
+/* Nav active */
+.nav-btn.active {
+  background: rgb(30, 41, 59);
+  color: #10b981;
+}
+
+/* Score bar */
+.score-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: rgb(30, 41, 59);
+  overflow: hidden;
+}
+.score-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease-out;
+}
+
+/* Flashcard 3D flip */
+.flashcard-container {
+  width: 420px;
+  height: 300px;
+  perspective: 1200px;
+}
+.flashcard-inner {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  position: relative;
+}
+.flashcard-inner.flipped {
+  transform: rotateY(180deg);
+}
+.flashcard-front, .flashcard-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+}
+.flashcard-back {
+  transform: rotateY(180deg);
+}
+
+/* Match mode buttons */
+.match-btn {
+  @apply transition-all duration-200 cursor-pointer;
+}
+.match-btn:hover:not(.matched):not(.selected) {
+  border-color: rgb(52, 211, 153);
+  background: rgb(30, 41, 59);
+}
+.match-btn.selected {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+.match-btn.matched {
+  border-color: rgb(71, 85, 105);
+  background: rgb(30, 41, 59);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Badge */
+.badge {
+  @apply inline-flex items-center px-2 rounded-full text-xs font-medium border;
+}
+
+/* Hot word pill */
+.hot-pill {
+  @apply cursor-pointer transition-all duration-200;
+}
+.hot-pill:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px -3px rgba(16, 185, 129, 0.3);
+}
+
+/* Spell input states */
+.sp-correct { border-color: #10b981 !important; color: #10b981; }
+.sp-wrong { border-color: #ef4444 !important; color: #ef4444; }
+
+/* Pagination */
+.page-btn {
+  @apply inline-flex items-center justify-center rounded-lg text-sm transition-all duration-150 cursor-pointer;
+  min-width: 36px;
+  height: 36px;
+  border: 1px solid rgb(51, 65, 85);
+  background: rgb(30, 41, 59);
+}
+.page-btn:hover { border-color: #10b981; color: #10b981; }
+.page-btn.active { background: #10b981; border-color: #10b981; color: white; }
+
+/* Responsive flashcard */
+@media (max-width: 480px) {
+  .flashcard-container { width: 100%; height: 260px; }
+}
+
+/* Word family tree connector */
+.family-word::before {
+  content: '├─';
+  color: rgb(71, 85, 105);
+  margin-right: 4px;
+}
+.family-word:last-child::before {
+  content: '└─';
+}
