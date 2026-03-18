@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "雅思数研社",
+  "productName": "IELTS Vocab",
   "version": "0.1.0",
   "identifier": "com.ielts-vocab.app",
   "build": {
@@ -36,6 +36,6 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-"externalBin": []
+    "externalBin": []
   }
 }
