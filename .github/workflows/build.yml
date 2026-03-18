@@ -15,7 +15,7 @@ jobs:
           - platform: windows-latest
             target: x86_64-pc-windows-msvc
             label: windows
-          - platform: macos-13
+          - platform: macos-latest
             target: x86_64-apple-darwin
             label: macos-intel
 
